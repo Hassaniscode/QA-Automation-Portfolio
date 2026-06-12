@@ -32,7 +32,8 @@ public class CheckoutPage {
         setInputValue(firstNameInput, firstName);
         setInputValue(lastNameInput, lastName);
         setInputValue(postalCodeInput, zip);
-        wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
+        js.executeScript("arguments[0].closest('form').requestSubmit(arguments[0]);",
+                wait.until(ExpectedConditions.elementToBeClickable(continueButton)));
         wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
