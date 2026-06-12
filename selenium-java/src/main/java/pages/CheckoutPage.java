@@ -28,16 +28,20 @@ public class CheckoutPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameInput)).sendKeys(firstName);
         driver.findElement(lastNameInput).sendKeys(lastName);
         driver.findElement(postalCodeInput).sendKeys(zip);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-                driver.findElement(continueButton));
+        jsClick(driver.findElement(continueButton));
+        wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
     public void finish() {
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-                wait.until(ExpectedConditions.elementToBeClickable(finishButton)));
+        jsClick(wait.until(ExpectedConditions.elementToBeClickable(finishButton)));
+        wait.until(ExpectedConditions.urlContains("checkout-complete"));
     }
 
     public String getConfirmationText() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationHeader)).getText();
+    }
+
+    private void jsClick(org.openqa.selenium.WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 }
