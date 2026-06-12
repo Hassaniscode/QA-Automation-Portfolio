@@ -28,7 +28,7 @@ public class CheckoutPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameInput)).sendKeys(firstName);
         driver.findElement(lastNameInput).sendKeys(lastName);
         driver.findElement(postalCodeInput).sendKeys(zip);
-        jsClick(driver.findElement(continueButton));
+        wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
         wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
