@@ -77,7 +77,7 @@ public class InventoryPage {
     }
 
     public void goToCart() {
-        wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
+        clickButton(wait.until(ExpectedConditions.elementToBeClickable(cartIcon)));
     }
 
     public void logout() {
