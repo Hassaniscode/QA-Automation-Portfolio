@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -27,11 +28,13 @@ public class CheckoutPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameInput)).sendKeys(firstName);
         driver.findElement(lastNameInput).sendKeys(lastName);
         driver.findElement(postalCodeInput).sendKeys(zip);
-        driver.findElement(continueButton).click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                driver.findElement(continueButton));
     }
 
     public void finish() {
-        wait.until(ExpectedConditions.elementToBeClickable(finishButton)).click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+                wait.until(ExpectedConditions.elementToBeClickable(finishButton)));
     }
 
     public String getConfirmationText() {
