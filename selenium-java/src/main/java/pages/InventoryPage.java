@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
@@ -21,30 +22,48 @@ public class InventoryPage {
     public InventoryPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(d -> !d.findElements(inventoryItems).isEmpty());
     }
 
     public void addItemToCart(String itemName) {
-        getItemButton(itemName).click();
-        wait.until(d -> getItemButton(itemName).getText().contains("Remove"));
+        int before = getCartCount();
+        findItemButton(itemName).click();
+        wait.until(d -> getCartCount() == before + 1);
     }
 
     public void removeItemFromCart(String itemName) {
-        getItemButton(itemName).click();
-        wait.until(d -> getItemButton(itemName).getText().contains("Add to cart"));
+        int before = getCartCount();
+        findItemButton(itemName).click();
+        if (before <= 1) {
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(cartBadge));
+        } else {
+            wait.until(d -> getCartCount() == before - 1);
+        }
     }
 
-    private WebElement getItemButton(String itemName) {
-        List<WebElement> items = driver.findElements(inventoryItems);
-        for (WebElement item : items) {
-            if (item.getText().contains(itemName)) {
-                return item.findElement(By.tagName("button"));
+    private WebElement findItemButton(String itemName) {
+        return wait.until(d -> {
+            for (WebElement item : d.findElements(inventoryItems)) {
+                if (item.getText().contains(itemName)) {
+                    return item.findElement(By.tagName("button"));
+                }
             }
+            return null;
+        });
+    }
+
+    private int getCartCount() {
+        List<WebElement> badges = driver.findElements(cartBadge);
+        if (badges.isEmpty()) return 0;
+        try {
+            return Integer.parseInt(badges.get(0).getText().trim());
+        } catch (NumberFormatException e) {
+            return 0;
         }
-        throw new RuntimeException("Item not found: " + itemName);
     }
 
     public String getCartBadgeCount() {
-        return driver.findElement(cartBadge).getText();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge)).getText();
     }
 
     public boolean isCartBadgeVisible() {
@@ -52,12 +71,11 @@ public class InventoryPage {
     }
 
     public void goToCart() {
-        driver.findElement(cartIcon).click();
+        wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
     }
 
     public void logout() {
         driver.findElement(menuButton).click();
-        wait.until(d -> d.findElement(logoutLink).isDisplayed());
-        driver.findElement(logoutLink).click();
+        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
     }
 }
