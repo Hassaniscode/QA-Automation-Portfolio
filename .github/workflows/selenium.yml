@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'selenium-java/**'
+      - '.github/workflows/selenium.yml'
   pull_request:
     branches: [main]
     paths:
       - 'selenium-java/**'
+      - '.github/workflows/selenium.yml'
 
 jobs:
   selenium:

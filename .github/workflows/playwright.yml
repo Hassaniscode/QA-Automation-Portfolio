@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'playwright-ts/**'
+      - '.github/workflows/playwright.yml'
   pull_request:
     branches: [main]
     paths:
       - 'playwright-ts/**'
+      - '.github/workflows/playwright.yml'
 
 jobs:
   playwright:
