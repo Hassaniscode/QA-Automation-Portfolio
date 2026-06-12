@@ -1,0 +1,15 @@
+# Playwright
+playwright-ts/node_modules/
+playwright-ts/playwright-report/
+playwright-ts/test-results/
+playwright-ts/.playwright/
+
+# Selenium / Maven
+selenium-java/target/
+selenium-java/.mvn/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
