@@ -42,16 +42,7 @@ public class BaseTest {
                 Path dest = Paths.get("target/screenshots", result.getName() + ".png");
                 Files.createDirectories(dest.getParent());
                 Files.copy(screenshot.toPath(), dest);
-                System.out.println("Screenshot saved: " + dest);
-                System.out.println("Current URL: " + driver.getCurrentUrl());
-                // Dump checkout form HTML and any error messages
-                String formHtml = (String) ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript("var f = document.querySelector('.checkout_info'); " +
-                                "var e = document.querySelector('[data-test=\"error\"]'); " +
-                                "return 'FORM: ' + (f ? f.innerHTML : 'NOT FOUND') + ' ERROR: ' + (e ? e.textContent : 'NONE');");
-                System.out.println("DEBUG: " + formHtml);
-            } catch (Exception e) {
-                System.out.println("Failed to capture screenshot: " + e.getMessage());
+            } catch (Exception ignored) {
             }
         }
         if (driver != null) {
