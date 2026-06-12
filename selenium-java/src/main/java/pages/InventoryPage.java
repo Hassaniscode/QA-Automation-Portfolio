@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -22,22 +23,23 @@ public class InventoryPage {
     public InventoryPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(d -> !d.findElements(inventoryItems).isEmpty());
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector(".inventory_item button")));
     }
 
     public void addItemToCart(String itemName) {
-        int before = getCartCount();
-        findItemButton(itemName).click();
-        wait.until(d -> getCartCount() == before + 1);
+        int target = getCartCount() + 1;
+        clickButton(findItemButton(itemName));
+        wait.until(d -> getCartCount() == target);
     }
 
     public void removeItemFromCart(String itemName) {
-        int before = getCartCount();
-        findItemButton(itemName).click();
-        if (before <= 1) {
+        int target = getCartCount() - 1;
+        clickButton(findItemButton(itemName));
+        if (target == 0) {
             wait.until(ExpectedConditions.invisibilityOfElementLocated(cartBadge));
         } else {
-            wait.until(d -> getCartCount() == before - 1);
+            wait.until(d -> getCartCount() == target);
         }
     }
 
@@ -50,6 +52,10 @@ public class InventoryPage {
             }
             return null;
         });
+    }
+
+    private void clickButton(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 
     private int getCartCount() {
