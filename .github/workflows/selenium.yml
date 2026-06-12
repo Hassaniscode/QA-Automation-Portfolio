@@ -44,3 +44,11 @@ jobs:
           name: surefire-reports
           path: selenium-java/target/surefire-reports/
           retention-days: 7
+
+      - name: Upload failure screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: failure-screenshots
+          path: selenium-java/target/screenshots/
+          retention-days: 7
