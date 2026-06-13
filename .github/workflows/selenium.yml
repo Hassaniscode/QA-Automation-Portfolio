@@ -34,7 +34,7 @@ jobs:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Run Selenium tests
+      - name: Run E2E and API tests
         run: mvn test
 
       - name: Upload Surefire reports

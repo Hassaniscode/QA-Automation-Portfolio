@@ -1,28 +1,51 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests/e2e',
   timeout: 30000,
   retries: 1,
   reporter: [['html', { open: 'never' }], ['list']],
-  use: {
-    baseURL: 'https://www.saucedemo.com',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    headless: true,
-  },
   projects: [
+    // E2E browser tests
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      testDir: './tests/e2e',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://www.saucedemo.com',
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        headless: true,
+      },
     },
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      testDir: './tests/e2e',
+      use: {
+        ...devices['Desktop Firefox'],
+        baseURL: 'https://www.saucedemo.com',
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        headless: true,
+      },
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      testDir: './tests/e2e',
+      use: {
+        ...devices['Desktop Safari'],
+        baseURL: 'https://www.saucedemo.com',
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        headless: true,
+      },
+    },
+    // API tests (no browser needed)
+    {
+      name: 'api',
+      testDir: './tests/api',
+      use: {
+        baseURL: 'https://jsonplaceholder.typicode.com',
+      },
     },
   ],
 });
