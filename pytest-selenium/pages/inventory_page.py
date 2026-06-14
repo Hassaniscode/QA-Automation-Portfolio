@@ -32,7 +32,8 @@ class InventoryPage:
         self.driver.execute_script("arguments[0].click();", btn)
 
     def go_to_cart(self):
-        self.driver.find_element(*self._cart_link).click()
+        cart = self.driver.find_element(*self._cart_link)
+        self.driver.execute_script("arguments[0].click();", cart)
         WebDriverWait(self.driver, 10).until(EC.url_contains("cart"))
 
     def get_cart_badge_count(self) -> str:
