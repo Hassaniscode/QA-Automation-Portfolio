@@ -10,6 +10,9 @@ from conftest import STANDARD_USER, PASSWORD
 def inventory_page(driver):
     login_page = LoginPage(driver)
     login_page.login(STANDARD_USER, PASSWORD)
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    WebDriverWait(driver, 10).until(EC.url_contains("inventory"))
     return InventoryPage(driver)
 
 

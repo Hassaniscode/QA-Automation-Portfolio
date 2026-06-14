@@ -12,19 +12,24 @@ class InventoryPage:
         self._menu_button = (By.ID, "react-burger-menu-btn")
         self._logout_link = (By.ID, "logout_sidebar_link")
 
+    def _item_slug(self, item_name: str) -> str:
+        return item_name.lower().replace(" ", "-")
+
     def add_item_to_cart(self, item_name: str):
+        slug = self._item_slug(item_name)
+        add_locator = (By.CSS_SELECTOR, f'[data-test="add-to-cart-{slug}"]')
+        remove_locator = (By.CSS_SELECTOR, f'[data-test="remove-{slug}"]')
         wait = WebDriverWait(self.driver, 10)
-        locator = (By.XPATH, f"//div[@class='inventory_item' and .//div[text()='{item_name}']]")
-        item = wait.until(EC.presence_of_element_located(locator))
-        btn = item.find_element(By.CSS_SELECTOR, "button")
-        wait.until(EC.element_to_be_clickable(btn))
-        btn.click()
+        btn = wait.until(EC.element_to_be_clickable(add_locator))
+        self.driver.execute_script("arguments[0].click();", btn)
+        wait.until(EC.presence_of_element_located(remove_locator))
 
     def remove_item_from_cart(self, item_name: str):
-        item = self.driver.find_element(
-            By.XPATH, f"//div[@class='inventory_item' and .//div[text()='{item_name}']]"
-        )
-        item.find_element(By.CSS_SELECTOR, "button").click()
+        slug = self._item_slug(item_name)
+        locator = (By.CSS_SELECTOR, f'[data-test="remove-{slug}"]')
+        wait = WebDriverWait(self.driver, 10)
+        btn = wait.until(EC.element_to_be_clickable(locator))
+        self.driver.execute_script("arguments[0].click();", btn)
 
     def go_to_cart(self):
         self.driver.find_element(*self._cart_link).click()
