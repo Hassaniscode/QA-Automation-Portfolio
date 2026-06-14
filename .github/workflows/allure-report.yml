@@ -56,6 +56,21 @@ jobs:
         run: cd selenium-java && mvn test
         continue-on-error: true
 
+      # --- Pytest tests ---
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: pytest-selenium/requirements.txt
+
+      - name: Install Pytest dependencies
+        run: pip install -r pytest-selenium/requirements.txt
+
+      - name: Run Pytest tests
+        run: cd pytest-selenium && pytest -v --tb=short
+        continue-on-error: true
+
       # --- Generate Allure report ---
       - name: Install Allure CLI
         run: |

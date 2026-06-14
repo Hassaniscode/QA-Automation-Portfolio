@@ -1,0 +1,52 @@
+name: Pytest Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pytest-selenium/**'
+      - '.github/workflows/pytest.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'pytest-selenium/**'
+      - '.github/workflows/pytest.yml'
+
+jobs:
+  pytest:
+    name: Run Pytest Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pytest-selenium
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: pytest-selenium/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run API tests
+        run: pytest tests/api/ -v --tb=short --html=reports/api-report.html --self-contained-html
+
+      - name: Run E2E tests
+        run: pytest tests/e2e/ -v --tb=short --html=reports/e2e-report.html --self-contained-html
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pytest-reports
+          path: pytest-selenium/reports/
+          retention-days: 7

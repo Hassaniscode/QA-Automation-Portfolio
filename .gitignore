@@ -9,6 +9,13 @@ playwright-ts/allure-results/
 selenium-java/target/
 selenium-java/.mvn/
 
+# Pytest
+pytest-selenium/venv/
+pytest-selenium/__pycache__/
+pytest-selenium/**/__pycache__/
+pytest-selenium/.pytest_cache/
+pytest-selenium/reports/
+
 # IDE
 .idea/
 *.iml
