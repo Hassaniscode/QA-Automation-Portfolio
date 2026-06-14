@@ -8,6 +8,7 @@
     "test:report": "npx playwright show-report"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.44.0",
     "@types/node": "^20.0.0",
     "allure-playwright": "^3.10.0",
