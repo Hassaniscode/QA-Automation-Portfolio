@@ -13,10 +13,12 @@ class InventoryPage:
         self._logout_link = (By.ID, "logout_sidebar_link")
 
     def add_item_to_cart(self, item_name: str):
-        item = self.driver.find_element(
-            By.XPATH, f"//div[@class='inventory_item' and .//div[text()='{item_name}']]"
-        )
-        item.find_element(By.CSS_SELECTOR, "button").click()
+        wait = WebDriverWait(self.driver, 10)
+        locator = (By.XPATH, f"//div[@class='inventory_item' and .//div[text()='{item_name}']]")
+        item = wait.until(EC.presence_of_element_located(locator))
+        btn = item.find_element(By.CSS_SELECTOR, "button")
+        wait.until(EC.element_to_be_clickable(btn))
+        btn.click()
 
     def remove_item_from_cart(self, item_name: str):
         item = self.driver.find_element(
@@ -26,6 +28,7 @@ class InventoryPage:
 
     def go_to_cart(self):
         self.driver.find_element(*self._cart_link).click()
+        WebDriverWait(self.driver, 10).until(EC.url_contains("cart"))
 
     def get_cart_badge_count(self) -> str:
         return self.driver.find_element(*self._cart_badge).text
