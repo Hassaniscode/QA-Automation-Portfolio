@@ -80,10 +80,13 @@ jobs:
       - name: Merge Allure results
         run: |
           mkdir -p allure-results
+          echo "Playwright results: $(ls playwright-ts/allure-results/*-result.json 2>/dev/null | wc -l)"
           cp -r playwright-ts/allure-results/* allure-results/ 2>/dev/null || true
+          echo "Selenium results: $(ls selenium-java/target/allure-results/*-result.json 2>/dev/null | wc -l)"
           cp -r selenium-java/target/allure-results/* allure-results/ 2>/dev/null || true
+          echo "Pytest results: $(ls pytest-selenium/allure-results/*-result.json 2>/dev/null | wc -l)"
           cp -r pytest-selenium/allure-results/* allure-results/ 2>/dev/null || true
-          echo "Results count: $(ls allure-results/*.json 2>/dev/null | wc -l)"
+          echo "Total merged results: $(ls allure-results/*-result.json 2>/dev/null | wc -l)"
 
       - name: Get Allure history
         uses: actions/checkout@v4
