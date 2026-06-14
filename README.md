@@ -2,8 +2,11 @@
 
 ![Playwright Tests](https://github.com/Hassaniscode/QA-Automation-Portfolio/actions/workflows/playwright.yml/badge.svg)
 ![Selenium Tests](https://github.com/Hassaniscode/QA-Automation-Portfolio/actions/workflows/selenium.yml/badge.svg)
+![Allure Report](https://github.com/Hassaniscode/QA-Automation-Portfolio/actions/workflows/allure-report.yml/badge.svg)
 
 End-to-end and API test automation portfolio demonstrating QA engineering across two frameworks and two test layers against real-world web and REST targets.
+
+**[View Allure Report](https://hassaniscode.github.io/QA-Automation-Portfolio/)**
 
 ---
 

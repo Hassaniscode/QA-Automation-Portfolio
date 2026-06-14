@@ -3,6 +3,7 @@ playwright-ts/node_modules/
 playwright-ts/playwright-report/
 playwright-ts/test-results/
 playwright-ts/.playwright/
+playwright-ts/allure-results/
 
 # Selenium / Maven
 selenium-java/target/

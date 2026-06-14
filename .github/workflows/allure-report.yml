@@ -1,0 +1,97 @@
+name: Allure Report
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  test-and-report:
+    name: Run Tests & Publish Allure Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # --- Playwright tests ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: playwright-ts/package-lock.json
+
+      - name: Install Playwright dependencies
+        run: |
+          cd playwright-ts
+          npm ci
+          npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run Playwright tests
+        run: cd playwright-ts && npx playwright test
+        continue-on-error: true
+
+      # --- Selenium + REST Assured tests ---
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run Selenium tests
+        run: cd selenium-java && mvn test
+        continue-on-error: true
+
+      # --- Generate Allure report ---
+      - name: Merge Allure results
+        run: |
+          mkdir -p allure-results
+          cp -r playwright-ts/allure-results/* allure-results/ 2>/dev/null || true
+          cp -r selenium-java/target/allure-results/* allure-results/ 2>/dev/null || true
+
+      - name: Get Allure history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Copy history from previous report
+        run: |
+          mkdir -p allure-results/history
+          cp -r gh-pages/history/* allure-results/history/ 2>/dev/null || true
+
+      - name: Generate Allure report
+        uses: simple-elf/allure-report-action@v1.12
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
+          keep_reports: 20
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-history
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
