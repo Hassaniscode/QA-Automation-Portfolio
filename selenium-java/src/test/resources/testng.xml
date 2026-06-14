@@ -11,6 +11,16 @@
             <class name="tests.CartTest"/>
         </classes>
     </test>
+    <test name="Login Data-Driven Tests">
+        <classes>
+            <class name="tests.LoginDataDrivenTest"/>
+        </classes>
+    </test>
+    <test name="Cart Data-Driven Tests">
+        <classes>
+            <class name="tests.CartDataDrivenTest"/>
+        </classes>
+    </test>
     <test name="Users API Tests">
         <classes>
             <class name="tests.api.UsersApiTest"/>
