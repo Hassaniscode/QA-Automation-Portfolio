@@ -3,6 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   timeout: 30000,
   retries: 1,
+  snapshotPathTemplate: '{testDir}/__snapshots__/{arg}{ext}',
   reporter: [
     ['html', { open: 'never' }],
     ['list'],

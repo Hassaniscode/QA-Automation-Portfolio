@@ -43,6 +43,18 @@ jobs:
       - name: Run API tests
         run: npx playwright test --project=api
 
+      - name: Update visual snapshots (if missing)
+        if: failure()
+        run: npx playwright test visual.spec.ts --project=chromium --update-snapshots
+
+      - name: Upload visual snapshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-snapshots
+          path: playwright-ts/tests/e2e/__snapshots__/
+          retention-days: 30
+
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: always()
