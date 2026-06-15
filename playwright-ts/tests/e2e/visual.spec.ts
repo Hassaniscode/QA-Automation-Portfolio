@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { InventoryPage } from '../../pages/InventoryPage';
-import { USERS } from '../utils/constants';
+import { USERS, ITEMS } from '../utils/constants';
 
 test.describe('Visual Regression', () => {
   test('login page should match snapshot', async ({ page }) => {
@@ -29,7 +29,7 @@ test.describe('Visual Regression', () => {
     await loginPage.login(USERS.standard.username, USERS.standard.password);
 
     const inventoryPage = new InventoryPage(page);
-    await inventoryPage.addItemToCart('Sauce Labs Backpack');
+    await inventoryPage.addItemToCart(ITEMS.backpack);
     await inventoryPage.goToCart();
 
     await expect(page).toHaveScreenshot('cart-page.png', {

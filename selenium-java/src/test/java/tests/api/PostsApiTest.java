@@ -2,6 +2,7 @@ package tests.api;
 
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
+import tests.TestData;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -49,13 +50,13 @@ public class PostsApiTest extends BaseApiTest {
 
     @Test(description = "POST /posts should create a new post")
     public void testCreatePost() {
-        String body = """
+        String body = String.format("""
             {
-                "title": "API Testing with REST Assured",
-                "body": "Demonstrating API test automation",
+                "title": "%s",
+                "body": "%s",
                 "userId": 1
             }
-            """;
+            """, TestData.API_POST_TITLE, TestData.API_POST_BODY);
 
         given()
             .contentType(ContentType.JSON)
@@ -64,21 +65,21 @@ public class PostsApiTest extends BaseApiTest {
             .post("/posts")
         .then()
             .statusCode(201)
-            .body("title", equalTo("API Testing with REST Assured"))
+            .body("title", equalTo(TestData.API_POST_TITLE))
             .body("userId", equalTo(1))
             .body("id", notNullValue());
     }
 
     @Test(description = "PUT /posts/:id should replace a post")
     public void testUpdatePost() {
-        String body = """
+        String body = String.format("""
             {
                 "id": 1,
-                "title": "Updated Title",
-                "body": "Updated body content",
+                "title": "%s",
+                "body": "%s",
                 "userId": 1
             }
-            """;
+            """, TestData.API_POST_UPDATED_TITLE, TestData.API_POST_UPDATED_BODY);
 
         given()
             .contentType(ContentType.JSON)
@@ -87,8 +88,8 @@ public class PostsApiTest extends BaseApiTest {
             .put("/posts/1")
         .then()
             .statusCode(200)
-            .body("title", equalTo("Updated Title"))
-            .body("body", equalTo("Updated body content"));
+            .body("title", equalTo(TestData.API_POST_UPDATED_TITLE))
+            .body("body", equalTo(TestData.API_POST_UPDATED_BODY));
     }
 
     @Test(description = "DELETE /posts/:id should delete a post")

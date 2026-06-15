@@ -17,10 +17,6 @@ import java.nio.file.Paths;
 public class BaseTest {
 
     protected WebDriver driver;
-    protected static final String BASE_URL = "https://www.saucedemo.com";
-    protected static final String STANDARD_USER = "standard_user";
-    protected static final String LOCKED_USER = "locked_out_user";
-    protected static final String PASSWORD = "secret_sauce";
 
     @BeforeMethod
     public void setUp() {
@@ -31,7 +27,7 @@ public class BaseTest {
         options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1920,1080");
         driver = new ChromeDriver(options);
-        driver.get(BASE_URL);
+        driver.get(TestData.BASE_URL);
     }
 
     @AfterMethod

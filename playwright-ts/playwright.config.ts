@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { URLS } from './tests/utils/constants';
 
 export default defineConfig({
   timeout: 30000,
@@ -16,7 +17,7 @@ export default defineConfig({
       testDir: './tests/e2e',
       use: {
         ...devices['Desktop Chrome'],
-        baseURL: 'https://www.saucedemo.com',
+        baseURL: URLS.e2e,
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
         trace: 'retain-on-failure',
@@ -28,7 +29,7 @@ export default defineConfig({
       testDir: './tests/e2e',
       use: {
         ...devices['Desktop Firefox'],
-        baseURL: 'https://www.saucedemo.com',
+        baseURL: URLS.e2e,
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
         trace: 'retain-on-failure',
@@ -40,7 +41,7 @@ export default defineConfig({
       testDir: './tests/e2e',
       use: {
         ...devices['Desktop Safari'],
-        baseURL: 'https://www.saucedemo.com',
+        baseURL: URLS.e2e,
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
         trace: 'retain-on-failure',
@@ -52,7 +53,7 @@ export default defineConfig({
       name: 'api',
       testDir: './tests/api',
       use: {
-        baseURL: 'https://jsonplaceholder.typicode.com',
+        baseURL: URLS.api,
       },
     },
   ],

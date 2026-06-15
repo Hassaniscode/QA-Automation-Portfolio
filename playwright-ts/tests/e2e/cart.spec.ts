@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
 import { InventoryPage } from '../../pages/InventoryPage';
 import { CartPage, CheckoutPage } from '../../pages/CartPage';
-import { USERS, ITEMS } from '../utils/constants';
+import { USERS, ITEMS, CHECKOUT } from '../utils/constants';
 
 test.describe('Shopping Cart', () => {
   let inventoryPage: InventoryPage;
@@ -53,9 +53,9 @@ test.describe('Checkout', () => {
     await cartPage.proceedToCheckout();
 
     const checkoutPage = new CheckoutPage(page);
-    await checkoutPage.fillShippingInfo('Hassan', 'Faal', '75013');
+    await checkoutPage.fillShippingInfo(CHECKOUT.firstName, CHECKOUT.lastName, CHECKOUT.postalCode);
     await checkoutPage.finish();
 
-    await expect(checkoutPage.confirmationHeader).toHaveText('Thank you for your order!');
+    await expect(checkoutPage.confirmationHeader).toHaveText(CHECKOUT.confirmationMessage);
   });
 });

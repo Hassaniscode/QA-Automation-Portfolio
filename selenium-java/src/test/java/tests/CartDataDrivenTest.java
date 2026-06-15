@@ -14,16 +14,16 @@ public class CartDataDrivenTest extends BaseTest {
     @BeforeMethod
     public void loginBeforeEach() {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(STANDARD_USER, PASSWORD);
+        loginPage.login(TestData.STANDARD_USER, TestData.PASSWORD);
         inventoryPage = new InventoryPage(driver);
     }
 
     @DataProvider(name = "cartItems")
     public Object[][] cartItemData() {
         return new Object[][] {
-            { "Sauce Labs Backpack" },
-            { "Sauce Labs Bike Light" },
-            { "Sauce Labs Bolt T-Shirt" },
+            { TestData.ITEM_BACKPACK },
+            { TestData.ITEM_BIKE_LIGHT },
+            { TestData.ITEM_TSHIRT },
         };
     }
 

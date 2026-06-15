@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { URLS, API_TEST_DATA } from '../utils/constants';
 
-const BASE_URL = 'https://jsonplaceholder.typicode.com';
+const BASE_URL = URLS.api;
 
 test.describe('Posts API', () => {
   test('GET /posts - should return all posts', async ({ request }) => {
@@ -41,35 +42,24 @@ test.describe('Posts API', () => {
   });
 
   test('POST /posts - should create a new post', async ({ request }) => {
-    const response = await request.post(`${BASE_URL}/posts`, {
-      data: {
-        title: 'API Testing with Playwright',
-        body: 'Demonstrating API test automation',
-        userId: 1,
-      },
-    });
+    const newPost = API_TEST_DATA.posts.create;
+    const response = await request.post(`${BASE_URL}/posts`, { data: newPost });
 
     expect(response.status()).toBe(201);
     const body = await response.json();
-    expect(body.title).toBe('API Testing with Playwright');
-    expect(body.userId).toBe(1);
+    expect(body.title).toBe(newPost.title);
+    expect(body.userId).toBe(newPost.userId);
     expect(body.id).toBeTruthy();
   });
 
   test('PUT /posts/:id - should replace a post', async ({ request }) => {
-    const response = await request.put(`${BASE_URL}/posts/1`, {
-      data: {
-        id: 1,
-        title: 'Updated Title',
-        body: 'Updated body content',
-        userId: 1,
-      },
-    });
+    const updatedPost = API_TEST_DATA.posts.update;
+    const response = await request.put(`${BASE_URL}/posts/1`, { data: updatedPost });
 
     expect(response.status()).toBe(200);
     const body = await response.json();
-    expect(body.title).toBe('Updated Title');
-    expect(body.body).toBe('Updated body content');
+    expect(body.title).toBe(updatedPost.title);
+    expect(body.body).toBe(updatedPost.body);
   });
 
   test('DELETE /posts/:id - should delete a post', async ({ request }) => {

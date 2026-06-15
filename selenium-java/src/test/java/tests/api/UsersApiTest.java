@@ -2,6 +2,7 @@ package tests.api;
 
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
+import tests.TestData;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
@@ -45,13 +46,13 @@ public class UsersApiTest extends BaseApiTest {
 
     @Test(description = "POST /users should create a new user")
     public void testCreateUser() {
-        String body = """
+        String body = String.format("""
             {
-                "name": "Hassan Faal",
-                "username": "hassanf",
-                "email": "hassan@example.com"
+                "name": "%s",
+                "username": "%s",
+                "email": "%s"
             }
-            """;
+            """, TestData.API_USER_NAME, TestData.API_USER_USERNAME, TestData.API_USER_EMAIL);
 
         given()
             .contentType(ContentType.JSON)
@@ -60,21 +61,21 @@ public class UsersApiTest extends BaseApiTest {
             .post("/users")
         .then()
             .statusCode(201)
-            .body("name", equalTo("Hassan Faal"))
-            .body("username", equalTo("hassanf"))
-            .body("email", equalTo("hassan@example.com"))
+            .body("name", equalTo(TestData.API_USER_NAME))
+            .body("username", equalTo(TestData.API_USER_USERNAME))
+            .body("email", equalTo(TestData.API_USER_EMAIL))
             .body("id", notNullValue());
     }
 
     @Test(description = "PUT /users/:id should update a user")
     public void testUpdateUser() {
-        String body = """
+        String body = String.format("""
             {
-                "name": "Hassan Updated",
-                "username": "hassanf",
-                "email": "hassan.updated@example.com"
+                "name": "%s",
+                "username": "%s",
+                "email": "%s"
             }
-            """;
+            """, TestData.API_USER_UPDATED_NAME, TestData.API_USER_USERNAME, TestData.API_USER_UPDATED_EMAIL);
 
         given()
             .contentType(ContentType.JSON)
@@ -83,16 +84,16 @@ public class UsersApiTest extends BaseApiTest {
             .put("/users/1")
         .then()
             .statusCode(200)
-            .body("name", equalTo("Hassan Updated"));
+            .body("name", equalTo(TestData.API_USER_UPDATED_NAME));
     }
 
     @Test(description = "PATCH /users/:id should partially update a user")
     public void testPartialUpdateUser() {
-        String body = """
+        String body = String.format("""
             {
-                "name": "Hassan Patched"
+                "name": "%s"
             }
-            """;
+            """, TestData.API_USER_PATCHED_NAME);
 
         given()
             .contentType(ContentType.JSON)
@@ -101,7 +102,7 @@ public class UsersApiTest extends BaseApiTest {
             .patch("/users/1")
         .then()
             .statusCode(200)
-            .body("name", equalTo("Hassan Patched"));
+            .body("name", equalTo(TestData.API_USER_PATCHED_NAME));
     }
 
     @Test(description = "DELETE /users/:id should delete a user")

@@ -1,7 +1,7 @@
-import pytest
 import requests
+from tests.constants import URLS, API_TEST_DATA
 
-BASE_URL = "https://jsonplaceholder.typicode.com"
+BASE_URL = URLS["api"]
 
 
 class TestUsersApi:
@@ -26,30 +26,24 @@ class TestUsersApi:
         assert response.status_code == 404
 
     def test_create_user(self):
-        response = requests.post(
-            f"{BASE_URL}/users",
-            json={"name": "Hassan Faal", "username": "hassanf", "email": "hassan@example.com"},
-        )
+        new_user = API_TEST_DATA["users"]["create"]
+        response = requests.post(f"{BASE_URL}/users", json=new_user)
         assert response.status_code == 201
         data = response.json()
-        assert data["name"] == "Hassan Faal"
+        assert data["name"] == new_user["name"]
         assert data["id"]
 
     def test_update_user(self):
-        response = requests.put(
-            f"{BASE_URL}/users/1",
-            json={"name": "Hassan Updated", "username": "hassanf"},
-        )
+        updated_user = API_TEST_DATA["users"]["update"]
+        response = requests.put(f"{BASE_URL}/users/1", json=updated_user)
         assert response.status_code == 200
-        assert response.json()["name"] == "Hassan Updated"
+        assert response.json()["name"] == updated_user["name"]
 
     def test_patch_user(self):
-        response = requests.patch(
-            f"{BASE_URL}/users/1",
-            json={"name": "Hassan Patched"},
-        )
+        patch_data = API_TEST_DATA["users"]["patch"]
+        response = requests.patch(f"{BASE_URL}/users/1", json=patch_data)
         assert response.status_code == 200
-        assert response.json()["name"] == "Hassan Patched"
+        assert response.json()["name"] == patch_data["name"]
 
     def test_delete_user(self):
         response = requests.delete(f"{BASE_URL}/users/1")

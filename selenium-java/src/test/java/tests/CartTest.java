@@ -15,34 +15,34 @@ public class CartTest extends BaseTest {
     @BeforeMethod
     public void loginBeforeEach() {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(STANDARD_USER, PASSWORD);
+        loginPage.login(TestData.STANDARD_USER, TestData.PASSWORD);
         inventoryPage = new InventoryPage(driver);
     }
 
     @Test(description = "Adding item to cart should update badge count")
     public void testAddItemToCart() {
-        inventoryPage.addItemToCart("Sauce Labs Backpack");
+        inventoryPage.addItemToCart(TestData.ITEM_BACKPACK);
         Assert.assertTrue(inventoryPage.isCartBadgeVisible());
         Assert.assertEquals(inventoryPage.getCartBadgeCount(), "1");
     }
 
     @Test(description = "Removing item should clear cart badge")
     public void testRemoveItemFromCart() {
-        inventoryPage.addItemToCart("Sauce Labs Backpack");
-        inventoryPage.removeItemFromCart("Sauce Labs Backpack");
+        inventoryPage.addItemToCart(TestData.ITEM_BACKPACK);
+        inventoryPage.removeItemFromCart(TestData.ITEM_BACKPACK);
         Assert.assertFalse(inventoryPage.isCartBadgeVisible());
     }
 
     @Test(description = "Multiple items should reflect correct count")
     public void testAddMultipleItems() {
-        inventoryPage.addItemToCart("Sauce Labs Backpack");
-        inventoryPage.addItemToCart("Sauce Labs Bike Light");
+        inventoryPage.addItemToCart(TestData.ITEM_BACKPACK);
+        inventoryPage.addItemToCart(TestData.ITEM_BIKE_LIGHT);
         Assert.assertEquals(inventoryPage.getCartBadgeCount(), "2");
     }
 
     @Test(description = "Full checkout flow should complete successfully")
     public void testFullCheckoutFlow() {
-        inventoryPage.addItemToCart("Sauce Labs Backpack");
+        inventoryPage.addItemToCart(TestData.ITEM_BACKPACK);
         inventoryPage.goToCart();
 
         CartPage cartPage = new CartPage(driver);
@@ -50,9 +50,9 @@ public class CartTest extends BaseTest {
         cartPage.proceedToCheckout();
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.fillShippingInfo("Hassan", "Faal", "75013");
+        checkoutPage.fillShippingInfo(TestData.CHECKOUT_FIRST_NAME, TestData.CHECKOUT_LAST_NAME, TestData.CHECKOUT_POSTAL_CODE);
         checkoutPage.finish();
 
-        Assert.assertEquals(checkoutPage.getConfirmationText(), "Thank you for your order!");
+        Assert.assertEquals(checkoutPage.getConfirmationText(), TestData.CHECKOUT_CONFIRMATION);
     }
 }

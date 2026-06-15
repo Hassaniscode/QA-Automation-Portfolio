@@ -1,22 +1,22 @@
 import pytest
 from pages.login_page import LoginPage
-from conftest import STANDARD_USER, LOCKED_USER, PASSWORD
+from tests.constants import USERS, VALID_USERNAMES, ERROR_MESSAGES
 
 
 class TestLogin:
     def test_valid_login(self, driver):
         login_page = LoginPage(driver)
-        login_page.login(STANDARD_USER, PASSWORD)
+        login_page.login(USERS["standard"]["username"], USERS["standard"]["password"])
         assert "inventory" in driver.current_url
 
     @pytest.mark.parametrize(
         "username, password, expected_error",
         [
-            ("wrong_user", "wrong_pass", "Username and password do not match"),
-            ("locked_out_user", "secret_sauce", "locked out"),
-            ("", "secret_sauce", "Username is required"),
-            ("standard_user", "", "Password is required"),
-            ("", "", "Username is required"),
+            (USERS["invalid"]["username"], USERS["invalid"]["password"], ERROR_MESSAGES["invalidCredentials"]),
+            (USERS["locked"]["username"], USERS["locked"]["password"], ERROR_MESSAGES["lockedOut"]),
+            ("", USERS["standard"]["password"], ERROR_MESSAGES["usernameRequired"]),
+            (USERS["standard"]["username"], "", ERROR_MESSAGES["passwordRequired"]),
+            ("", "", ERROR_MESSAGES["usernameRequired"]),
         ],
         ids=[
             "invalid_credentials",
@@ -32,11 +32,8 @@ class TestLogin:
         assert login_page.is_error_displayed()
         assert expected_error in login_page.get_error_message()
 
-    @pytest.mark.parametrize(
-        "username",
-        ["standard_user", "problem_user", "performance_glitch_user"],
-    )
+    @pytest.mark.parametrize("username", VALID_USERNAMES)
     def test_valid_users_reach_inventory(self, driver, username):
         login_page = LoginPage(driver)
-        login_page.login(username, PASSWORD)
+        login_page.login(username, USERS["standard"]["password"])
         assert "inventory" in driver.current_url

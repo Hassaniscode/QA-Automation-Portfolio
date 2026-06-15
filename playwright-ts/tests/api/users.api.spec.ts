@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { URLS, API_TEST_DATA } from '../utils/constants';
 
-const BASE_URL = 'https://jsonplaceholder.typicode.com';
+const BASE_URL = URLS.api;
 
 test.describe('Users API', () => {
   test('GET /users - should return list of users', async ({ request }) => {
@@ -32,46 +33,33 @@ test.describe('Users API', () => {
   });
 
   test('POST /users - should create a new user', async ({ request }) => {
-    const response = await request.post(`${BASE_URL}/users`, {
-      data: {
-        name: 'Hassan Faal',
-        username: 'hassanf',
-        email: 'hassan@example.com',
-      },
-    });
+    const newUser = API_TEST_DATA.users.create;
+    const response = await request.post(`${BASE_URL}/users`, { data: newUser });
 
     expect(response.status()).toBe(201);
     const body = await response.json();
-    expect(body.name).toBe('Hassan Faal');
-    expect(body.username).toBe('hassanf');
-    expect(body.email).toBe('hassan@example.com');
+    expect(body.name).toBe(newUser.name);
+    expect(body.username).toBe(newUser.username);
+    expect(body.email).toBe(newUser.email);
     expect(body.id).toBeTruthy();
   });
 
   test('PUT /users/:id - should update a user', async ({ request }) => {
-    const response = await request.put(`${BASE_URL}/users/1`, {
-      data: {
-        name: 'Hassan Updated',
-        username: 'hassanf',
-        email: 'hassan.updated@example.com',
-      },
-    });
+    const updatedUser = API_TEST_DATA.users.update;
+    const response = await request.put(`${BASE_URL}/users/1`, { data: updatedUser });
 
     expect(response.status()).toBe(200);
     const body = await response.json();
-    expect(body.name).toBe('Hassan Updated');
+    expect(body.name).toBe(updatedUser.name);
   });
 
   test('PATCH /users/:id - should partially update a user', async ({ request }) => {
-    const response = await request.patch(`${BASE_URL}/users/1`, {
-      data: {
-        name: 'Hassan Patched',
-      },
-    });
+    const patchData = API_TEST_DATA.users.patch;
+    const response = await request.patch(`${BASE_URL}/users/1`, { data: patchData });
 
     expect(response.status()).toBe(200);
     const body = await response.json();
-    expect(body.name).toBe('Hassan Patched');
+    expect(body.name).toBe(patchData.name);
   });
 
   test('DELETE /users/:id - should delete a user', async ({ request }) => {

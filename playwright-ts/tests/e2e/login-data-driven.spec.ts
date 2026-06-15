@@ -1,37 +1,37 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../pages/LoginPage';
-import { USERS } from '../utils/constants';
+import { USERS, VALID_USERNAMES, ERROR_MESSAGES } from '../utils/constants';
 
 const invalidLoginCases = [
   {
     name: 'invalid credentials',
     username: USERS.invalid.username,
     password: USERS.invalid.password,
-    expectedError: 'Username and password do not match',
+    expectedError: ERROR_MESSAGES.invalidCredentials,
   },
   {
     name: 'locked out user',
     username: USERS.locked.username,
     password: USERS.locked.password,
-    expectedError: 'locked out',
+    expectedError: ERROR_MESSAGES.lockedOut,
   },
   {
     name: 'empty username',
     username: '',
     password: USERS.standard.password,
-    expectedError: 'Username is required',
+    expectedError: ERROR_MESSAGES.usernameRequired,
   },
   {
     name: 'empty password',
     username: USERS.standard.username,
     password: '',
-    expectedError: 'Password is required',
+    expectedError: ERROR_MESSAGES.passwordRequired,
   },
   {
     name: 'both fields empty',
     username: '',
     password: '',
-    expectedError: 'Username is required',
+    expectedError: ERROR_MESSAGES.usernameRequired,
   },
 ];
 
@@ -48,18 +48,12 @@ test.describe('Login - Data-driven error scenarios', () => {
   }
 });
 
-const validLoginUsers = [
-  { name: 'standard_user', username: 'standard_user' },
-  { name: 'problem_user', username: 'problem_user' },
-  { name: 'performance_glitch_user', username: 'performance_glitch_user' },
-];
-
 test.describe('Login - Data-driven valid users', () => {
-  for (const { name, username } of validLoginUsers) {
-    test(`should login successfully as ${name}`, async ({ page }) => {
+  for (const username of VALID_USERNAMES) {
+    test(`should login successfully as ${username}`, async ({ page }) => {
       const loginPage = new LoginPage(page);
       await loginPage.goto();
-      await loginPage.login(username, 'secret_sauce');
+      await loginPage.login(username, USERS.standard.password);
 
       await expect(page).toHaveURL(/inventory/);
     });

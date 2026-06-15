@@ -10,11 +10,11 @@ public class LoginDataDrivenTest extends BaseTest {
     @DataProvider(name = "invalidLogins")
     public Object[][] invalidLoginData() {
         return new Object[][] {
-            { "wrong_user",      "wrong_pass",   "Username and password do not match" },
-            { "locked_out_user", "secret_sauce",  "locked out" },
-            { "",                "secret_sauce",  "Username is required" },
-            { "standard_user",   "",              "Password is required" },
-            { "",                "",              "Username is required" },
+            { "wrong_user",         "wrong_pass",       TestData.ERROR_INVALID_CREDENTIALS },
+            { TestData.LOCKED_USER, TestData.PASSWORD,  TestData.ERROR_LOCKED_OUT },
+            { "",                   TestData.PASSWORD,   TestData.ERROR_USERNAME_REQUIRED },
+            { TestData.STANDARD_USER, "",                TestData.ERROR_PASSWORD_REQUIRED },
+            { "",                   "",                  TestData.ERROR_USERNAME_REQUIRED },
         };
     }
 
@@ -30,16 +30,16 @@ public class LoginDataDrivenTest extends BaseTest {
     @DataProvider(name = "validUsers")
     public Object[][] validUserData() {
         return new Object[][] {
-            { "standard_user" },
-            { "problem_user" },
-            { "performance_glitch_user" },
+            { TestData.VALID_USERNAMES[0] },
+            { TestData.VALID_USERNAMES[1] },
+            { TestData.VALID_USERNAMES[2] },
         };
     }
 
     @Test(dataProvider = "validUsers", description = "Valid user should reach inventory page")
     public void testValidLogin(String username) {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.login(username, PASSWORD);
+        loginPage.login(username, TestData.PASSWORD);
         Assert.assertTrue(driver.getCurrentUrl().contains("inventory"),
                 "Expected to land on inventory page for user: " + username);
     }

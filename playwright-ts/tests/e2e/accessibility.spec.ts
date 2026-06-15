@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { LoginPage } from '../../pages/LoginPage';
 import { InventoryPage } from '../../pages/InventoryPage';
-import { USERS } from '../utils/constants';
+import { USERS, ITEMS } from '../utils/constants';
 
 test.describe('Accessibility', () => {
   test('login page should have no critical a11y violations', async ({ page }) => {
@@ -36,7 +36,7 @@ test.describe('Accessibility', () => {
     await loginPage.login(USERS.standard.username, USERS.standard.password);
 
     const inventoryPage = new InventoryPage(page);
-    await inventoryPage.addItemToCart('Sauce Labs Backpack');
+    await inventoryPage.addItemToCart(ITEMS.backpack);
     await inventoryPage.goToCart();
 
     const results = await new AxeBuilder({ page })
