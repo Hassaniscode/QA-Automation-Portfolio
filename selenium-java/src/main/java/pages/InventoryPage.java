@@ -81,7 +81,7 @@ public class InventoryPage {
     }
 
     public void logout() {
-        driver.findElement(menuButton).click();
-        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
+        clickButton(driver.findElement(menuButton));
+        clickButton(wait.until(ExpectedConditions.visibilityOfElementLocated(logoutLink)));
     }
 }

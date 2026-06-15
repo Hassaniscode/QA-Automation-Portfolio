@@ -21,6 +21,11 @@
             <class name="tests.CartDataDrivenTest"/>
         </classes>
     </test>
+    <test name="Logout Tests">
+        <classes>
+            <class name="tests.LogoutTest"/>
+        </classes>
+    </test>
     <test name="Users API Tests">
         <classes>
             <class name="tests.api.UsersApiTest"/>
