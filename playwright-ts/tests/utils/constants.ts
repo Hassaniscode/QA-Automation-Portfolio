@@ -44,6 +44,13 @@ export const CHECKOUT = {
   confirmationMessage: 'Thank you for your order!',
 };
 
+export const SORT_OPTIONS = {
+  nameAZ: 'az',
+  nameZA: 'za',
+  priceLowHigh: 'lohi',
+  priceHighLow: 'hilo',
+};
+
 export const API_TEST_DATA = {
   users: {
     create: { name: 'Hassan Faal', username: 'hassanf', email: 'hassan@example.com' },

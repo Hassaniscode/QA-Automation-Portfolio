@@ -5,9 +5,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InventoryPage {
 
@@ -19,6 +21,9 @@ public class InventoryPage {
     private final By menuButton = By.id("react-burger-menu-btn");
     private final By logoutLink = By.id("logout_sidebar_link");
     private final By inventoryItems = By.cssSelector(".inventory_item");
+    private final By sortDropdown = By.cssSelector("[data-test='product-sort-container']");
+    private final By itemNames = By.cssSelector(".inventory_item_name");
+    private final By itemPrices = By.cssSelector(".inventory_item_price");
 
     public InventoryPage(WebDriver driver) {
         this.driver = driver;
@@ -78,6 +83,22 @@ public class InventoryPage {
 
     public void goToCart() {
         clickButton(wait.until(ExpectedConditions.elementToBeClickable(cartIcon)));
+    }
+
+    public void sortBy(String option) {
+        new Select(driver.findElement(sortDropdown)).selectByValue(option);
+    }
+
+    public List<String> getProductNames() {
+        return driver.findElements(itemNames).stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+    }
+
+    public List<Double> getProductPrices() {
+        return driver.findElements(itemPrices).stream()
+                .map(el -> Double.parseDouble(el.getText().replace("$", "")))
+                .collect(Collectors.toList());
     }
 
     public void logout() {

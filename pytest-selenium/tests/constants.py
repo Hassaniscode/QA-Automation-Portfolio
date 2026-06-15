@@ -31,6 +31,13 @@ CHECKOUT = {
     "confirmationMessage": "Thank you for your order!",
 }
 
+SORT_OPTIONS = {
+    "nameAZ": "az",
+    "nameZA": "za",
+    "priceLowHigh": "lohi",
+    "priceHighLow": "hilo",
+}
+
 API_TEST_DATA = {
     "users": {
         "create": {"name": "Hassan Faal", "username": "hassanf", "email": "hassan@example.com"},

@@ -23,6 +23,12 @@ public final class TestData {
     public static final String ITEM_BIKE_LIGHT = "Sauce Labs Bike Light";
     public static final String ITEM_TSHIRT = "Sauce Labs Bolt T-Shirt";
 
+    // Sort options
+    public static final String SORT_NAME_AZ = "az";
+    public static final String SORT_NAME_ZA = "za";
+    public static final String SORT_PRICE_LOW_HIGH = "lohi";
+    public static final String SORT_PRICE_HIGH_LOW = "hilo";
+
     // Error messages
     public static final String ERROR_INVALID_CREDENTIALS = "Username and password do not match";
     public static final String ERROR_LOCKED_OUT = "locked out";

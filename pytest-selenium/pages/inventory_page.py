@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 
 
@@ -11,6 +11,9 @@ class InventoryPage:
         self._cart_link = (By.CSS_SELECTOR, ".shopping_cart_link")
         self._menu_button = (By.ID, "react-burger-menu-btn")
         self._logout_link = (By.ID, "logout_sidebar_link")
+        self._sort_dropdown = (By.CSS_SELECTOR, '[data-test="product-sort-container"]')
+        self._item_names = (By.CSS_SELECTOR, ".inventory_item_name")
+        self._item_prices = (By.CSS_SELECTOR, ".inventory_item_price")
 
     def _item_slug(self, item_name: str) -> str:
         return item_name.lower().replace(" ", "-")
@@ -41,6 +44,18 @@ class InventoryPage:
 
     def is_cart_badge_visible(self) -> bool:
         return len(self.driver.find_elements(*self._cart_badge)) > 0
+
+    def sort_by(self, option: str):
+        dropdown = self.driver.find_element(*self._sort_dropdown)
+        Select(dropdown).select_by_value(option)
+
+    def get_product_names(self) -> list[str]:
+        elements = self.driver.find_elements(*self._item_names)
+        return [el.text for el in elements]
+
+    def get_product_prices(self) -> list[float]:
+        elements = self.driver.find_elements(*self._item_prices)
+        return [float(el.text.replace("$", "")) for el in elements]
 
     def logout(self):
         self.driver.find_element(*self._menu_button).click()
